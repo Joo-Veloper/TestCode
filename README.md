@@ -90,3 +90,104 @@
 - **입력값이 잘못된 경우를 모두 고려했는가? (예외 케이스)**
 - **최소, 최대값 등 경계에서의 동작을 확인했는가? (경계값 테스트)**
 - **범위, 구간, 날짜와 관련된 조건을 체크했는가? (범위 테스트)**
+
+---
+### **🧪 테스트하기 어려운 영역과 분리하는 방법**
+
+소프트웨어 테스트를 수행할 때, 코드 내 특정 요소들이 테스트를 어렵게 만드는 경우가 많습니다. 이러한 요소를 식별하고 분리하면, 테스트의 신뢰성을 높이고 유지보수를 용이하게 할 수 있습니다.
+
+---
+
+### 🚧 1. 테스트하기 어려운 영역
+테스트가 어려운 코드는 실행할 때마다 다른 결과를 반환하거나 외부 환경과의 상호작용에 의존하는 코드입니다.
+
+#### 🔍 1) 관측할 때마다 다른 값에 의존하는 코드
+- ⏳ 현재 날짜 및 시간 (`LocalDateTime.now()`, `System.currentTimeMillis()` 등)
+- 🎲 랜덤 값 (`Math.random()`, `UUID.randomUUID()` 등)
+- 🌍 전역 변수 (상태가 변경될 수 있는 변수)
+- 🎤 사용자 입력 (`Scanner`, 웹 요청 등)
+
+#### 🌐 2) 외부 세계에 영향을 주는 코드
+- 🖨️ 표준 출력 (`System.out.println()`)
+- 📩 메시지 발송 (이메일, SMS 등)
+- 🗄️ 데이터베이스 기록 (INSERT, UPDATE, DELETE 등)
+- 📡 네트워크 요청 (HTTP API 호출 등)
+
+---
+
+### ✅ 2. 테스트하기 쉬운 코드
+테스트하기 쉬운 코드는 같은 입력값에 대해 항상 같은 결과를 반환하며, 외부 환경과 단절된 순수한 형태를 가집니다.
+
+#### 🎯 1) 순수 함수
+- 같은 입력값에 대해 항상 같은 출력값을 반환
+- 외부 상태에 영향을 주지 않음
+- 예제:
+  ```java
+  public int add(int a, int b) {
+      return a + b;
+  }
+  ```
+
+#### 🔄 2) 외부 의존성을 분리
+- 현재 시간을 직접 호출하는 것이 아니라, 외부에서 주입받도록 설계
+- 랜덤 값 대신 의존성을 주입받아 결정론적 테스트 가능하도록 구현
+- 예제:
+  ```java
+  public class OrderService {
+      private final Clock clock;
+      
+      public OrderService(Clock clock) {
+          this.clock = clock;
+      }
+      
+      public LocalDateTime getCurrentTime() {
+          return LocalDateTime.now(clock);
+      }
+  }
+  ```
+  ```java
+  Clock fixedClock = Clock.fixed(Instant.parse("2023-01-01T00:00:00Z"), ZoneId.of("UTC"));
+  OrderService orderService = new OrderService(fixedClock);
+  LocalDateTime time = orderService.getCurrentTime(); // 항상 동일한 시간 반환
+  ```
+
+#### 🏗️ 3) 인터페이스 및 의존성 주입(DI)
+- 의존성을 인터페이스로 추상화하여 테스트 시 Mock 객체 사용 가능
+- 예제:
+  ```java
+  public interface TimeProvider {
+      LocalDateTime now();
+  }
+
+  public class RealTimeProvider implements TimeProvider {
+      public LocalDateTime now() {
+          return LocalDateTime.now();
+      }
+  }
+
+  public class OrderService {
+      private final TimeProvider timeProvider;
+      
+      public OrderService(TimeProvider timeProvider) {
+          this.timeProvider = timeProvider;
+      }
+      
+      public LocalDateTime getCurrentTime() {
+          return timeProvider.now();
+      }
+  }
+  ```
+  ```java
+  TimeProvider mockTimeProvider = () -> LocalDateTime.of(2023, 1, 1, 0, 0);
+  OrderService orderService = new OrderService(mockTimeProvider);
+  LocalDateTime time = orderService.getCurrentTime(); // 항상 2023-01-01 00:00 반환
+  ```
+
+---
+
+### 🎯 3. 결론
+테스트하기 어려운 요소를 분리하여, 예측 가능한 환경에서 테스트를 수행할 수 있도록 설계하는 것이 중요합니다. 이를 위해 다음과 같은 원칙을 적용할 수 있습니다.
+1. **🔹 순수 함수 작성** – 같은 입력값에 대해 같은 결과 반환.
+2. **🛠️ 의존성 주입(DI) 활용** – 외부 환경과의 직접적인 의존성을 제거.
+3. **🎭 Mock 객체 활용** – 외부 시스템과의 상호작용을 테스트 시 시뮬레이션.
+4. **⏰ 시간, 랜덤 값 등의 요소를 외부에서 주입** – 결정론적 테스트 가능하도록 설계.
