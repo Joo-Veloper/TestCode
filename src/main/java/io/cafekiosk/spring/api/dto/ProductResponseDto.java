@@ -31,6 +31,7 @@ public class ProductResponseDto {
                 .id(product.getId())
                 .productNumber(product.getProductNumber())
                 .type(product.getType())
+                .sellingStatus(product.getSellingStatus())
                 .name(product.getName())
                 .price(product.getPrice())
                 .build();
