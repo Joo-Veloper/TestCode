@@ -349,5 +349,105 @@ BDD는 🛠**TDD**(Test-Driven Development, 테스트 주도 개발)에서 파�
 ✔ **👀 테스트의 명확성과 가독성 향상**  
 ✔ **📌 요구사항 기반의 개발 진행 가능**
 
+
+---
+## 📌 `@SpringBootTest` vs `@DataJpaTest`
+
+### 1️⃣ `@SpringBootTest` 🏗️
+`@SpringBootTest`는 **Spring Boot 애플리케이션 전체 컨텍스트를 로드**하여 테스트를 실행할 때 사용합니다.  
+즉, **모든 빈(bean)을 로드**하여 통합 테스트를 수행할 수 있습니다.
+
+#### ✅ 특징
+- 애플리케이션의 **전체 컨텍스트**를 로드
+- **모든 빈**이 활성화되므로 무거운 테스트가 될 수 있음
+- 데이터베이스, 서비스, 컨트롤러 등 **전체적인 동작 테스트** 가능
+- `webEnvironment` 옵션을 사용해 웹 서버를 실행할 수도 있음
+
+#### ✅ 사용 예제
+```java
+@SpringBootTest
+class MyApplicationTests {
+
+    @Test
+    void contextLoads() {
+        // 애플리케이션 컨텍스트가 정상적으로 로드되는지 확인
+    }
+}
+```
+
+#### ⚙️ `webEnvironment` 옵션
+```java
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+class WebTest {
+    @Autowired
+    private TestRestTemplate restTemplate;
+
+    @Test
+    void testHomePage() {
+        String body = this.restTemplate.getForObject("/", String.class);
+        assertThat(body).contains("Welcome");
+    }
+}
+```
+- `WebEnvironment.RANDOM_PORT` → 랜덤 포트로 서버 실행
+- `WebEnvironment.MOCK` → 내장 톰캣 없이 Mock 환경에서 실행
+
 ---
 
+### 2️⃣ `@DataJpaTest` 🗄️
+`@DataJpaTest`는 **JPA 관련 컴포넌트만 로드하여 테스트**할 때 사용합니다.  
+즉, **Repository 계층 테스트에 최적화**되어 있습니다.
+
+#### ✅ 특징
+- **Entity, Repository만 로드**
+- **데이터베이스 관련 기능만 테스트**
+- 기본적으로 **H2** 같은 **임베디드 데이터베이스를 사용**
+- **트랜잭션을 자동 롤백**하여 테스트 후 데이터가 남지 않음
+
+#### ✅ 사용 예제
+```java
+@DataJpaTest
+class UserRepositoryTest {
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Test
+    void testSaveAndFind() {
+        User user = new User("spring", "spring@example.com");
+        userRepository.save(user);
+
+        User foundUser = userRepository.findByEmail("spring@example.com");
+        assertThat(foundUser).isNotNull();
+    }
+}
+```
+
+#### ⚙️ `@AutoConfigureTestDatabase` 옵션
+기본적으로 **H2 데이터베이스를 사용**하지만, **실제 DB를 테스트하려면 설정 변경이 필요**합니다.
+```java
+@DataJpaTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE) // 실제 DB 사용
+class RealDatabaseTest {
+    @Autowired
+    private UserRepository userRepository;
+
+    @Test
+    void testWithRealDB() {
+        // MySQL, PostgreSQL 등 실제 DB에서 테스트
+    }
+}
+```
+
+---
+
+## 🎯 정리
+| 어노테이션 | 테스트 대상 | 특징 |
+|-----------|-----------|------|
+| `@SpringBootTest` 🌍 | 전체 애플리케이션 | 모든 빈 로드, 무거운 테스트, 통합 테스트 |
+| `@DataJpaTest` 🗄️ | JPA 관련 클래스 (Repository) | JPA만 로드, 빠른 테스트, 기본 H2 DB 사용 |
+
+✅ **`@SpringBootTest`는 전체적인 통합 테스트에 사용**하고,  
+✅ **`@DataJpaTest`는 JPA 관련 테스트에 최적화**된 어노테이션입니다.
+
+---
