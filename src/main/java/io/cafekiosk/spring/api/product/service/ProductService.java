@@ -1,6 +1,6 @@
-package io.cafekiosk.spring.api.service;
+package io.cafekiosk.spring.api.product.service;
 
-import io.cafekiosk.spring.api.dto.ProductResponseDto;
+import io.cafekiosk.spring.api.product.dto.ProductResponseDto;
 import io.cafekiosk.spring.domain.product.entity.Product;
 import io.cafekiosk.spring.domain.product.entity.ProductSellingStatus;
 import io.cafekiosk.spring.domain.product.repository.ProductRepository;
