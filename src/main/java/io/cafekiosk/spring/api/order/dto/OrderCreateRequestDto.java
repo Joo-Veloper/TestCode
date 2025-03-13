@@ -2,10 +2,12 @@ package io.cafekiosk.spring.api.order.dto;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Getter
+@NoArgsConstructor
 public class OrderCreateRequestDto {
 
     private List<String> productNumbers;

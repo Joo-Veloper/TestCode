@@ -1,4 +1,4 @@
-package io.cafekiosk.spring.domain.orderproduct;
+package io.cafekiosk.spring.domain.orderproduct.entity;
 
 import io.cafekiosk.spring.domain.order.entity.Order;
 import io.cafekiosk.spring.domain.product.entity.Product;

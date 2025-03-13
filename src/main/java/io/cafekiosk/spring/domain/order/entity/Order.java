@@ -1,6 +1,6 @@
 package io.cafekiosk.spring.domain.order.entity;
 
-import io.cafekiosk.spring.domain.orderproduct.OrderProduct;
+import io.cafekiosk.spring.domain.orderproduct.entity.OrderProduct;
 import io.cafekiosk.spring.domain.product.entity.Product;
 import io.cafekiosk.spring.domain.util.BaseEntity;
 import jakarta.persistence.*;
