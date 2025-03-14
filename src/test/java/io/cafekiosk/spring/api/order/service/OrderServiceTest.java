@@ -9,7 +9,6 @@ import io.cafekiosk.spring.domain.product.entity.ProductType;
 import io.cafekiosk.spring.domain.product.repository.ProductRepository;
 import io.cafekiosk.spring.domain.stock.entity.Stock;
 import io.cafekiosk.spring.domain.stock.repository.StockRepository;
-import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,7 +24,7 @@ import static io.cafekiosk.spring.domain.product.entity.ProductType.*;
 import static org.assertj.core.api.Assertions.*;
 
 @ActiveProfiles("test")
-@Transactional
+//@Transactional
 @SpringBootTest
 class OrderServiceTest {
 
@@ -44,12 +43,13 @@ class OrderServiceTest {
     @Autowired
     private StockRepository stockRepository;
 
-    /* @AfterEach
+    @AfterEach
     void tearDown() {
         orderProductRepository.deleteAllInBatch();
         productRepository.deleteAllInBatch();
         orderRepository.deleteAllInBatch();
-    }*/
+        stockRepository.deleteAllInBatch();
+    }
 
     @DisplayName("주문번호 리스트를 받아 주문을 생성한다.")
     @Test
@@ -127,12 +127,12 @@ class OrderServiceTest {
 
         productRepository.saveAll(List.of(product1, product2, product3));
 
-        Stock stock1= Stock.create("001", 2);
-        Stock stock2= Stock.create("002", 2);
+        Stock stock1 = Stock.create("001", 2);
+        Stock stock2 = Stock.create("002", 2);
         stockRepository.saveAll(List.of(stock1, stock2));
 
         OrderCreateRequestDto requestDto = OrderCreateRequestDto.builder()
-                .productNumbers(List.of("001","001", "002", "003"))
+                .productNumbers(List.of("001", "001", "002", "003"))
                 .build();
 
         // when
@@ -173,13 +173,13 @@ class OrderServiceTest {
 
         productRepository.saveAll(List.of(product1, product2, product3));
 
-        Stock stock1= Stock.create("001", 2);
+        Stock stock1 = Stock.create("001", 2);
         Stock stock2 = Stock.create("002", 2);
         stock1.deductQuantity(1); // todo
         stockRepository.saveAll(List.of(stock1, stock2));
 
         OrderCreateRequestDto requestDto = OrderCreateRequestDto.builder()
-                .productNumbers(List.of("001","001", "002", "003"))
+                .productNumbers(List.of("001", "001", "002", "003"))
                 .build();
 
         // when & then
