@@ -21,6 +21,7 @@ public class OrderController {
     @PostMapping("/new")
     public OrderResponseDto createOrder(@RequestBody OrderCreateRequestDto requestDto) {
         LocalDateTime registeredDateTime = LocalDateTime.now();
+
         return orderService.createOrder(requestDto, registeredDateTime);
     }
 

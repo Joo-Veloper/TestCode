@@ -27,6 +27,7 @@ public class ProductResponseDto {
     }
 
     public static ProductResponseDto of(Product product) {
+
         return ProductResponseDto.builder()
                 .id(product.getId())
                 .productNumber(product.getProductNumber())

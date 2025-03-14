@@ -18,6 +18,7 @@ public class ProductController {
 
     @GetMapping("/selling")
     public List<ProductResponseDto> getSellingProducts() {
+
         return productService.getSellingProducts();
     }
 

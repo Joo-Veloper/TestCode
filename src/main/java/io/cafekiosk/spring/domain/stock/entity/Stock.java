@@ -31,6 +31,7 @@ public class Stock extends BaseEntity {
 
 
     public static Stock create(String productNumber, int quantity) {
+
         return Stock.builder()
                 .productNumber(productNumber)
                 .quantity(quantity)
@@ -38,6 +39,7 @@ public class Stock extends BaseEntity {
     }
 
     public boolean isQuantityLessThan(int quantity) {
+
         return this.quantity < quantity;
     }
 
