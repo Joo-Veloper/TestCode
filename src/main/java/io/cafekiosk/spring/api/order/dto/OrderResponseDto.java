@@ -1,6 +1,6 @@
 package io.cafekiosk.spring.api.order.dto;
 
-import io.cafekiosk.spring.api.product.dto.ProductResponseDto;
+import io.cafekiosk.spring.api.product.dto.response.ProductResponseDto;
 import io.cafekiosk.spring.domain.order.entity.Order;
 import lombok.Builder;
 import lombok.Getter;
