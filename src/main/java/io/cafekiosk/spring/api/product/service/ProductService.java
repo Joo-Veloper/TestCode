@@ -20,17 +20,18 @@ public class ProductService {
     public ProductResponseDto createProduct(ProductCreateRequestDto requestDto) {
         String nextProductNumber = createNextProductNumber();
 
-        return ProductResponseDto.builder()
-                .productNumber(nextProductNumber)
-                .type(requestDto.getType())
-                .sellingStatus(requestDto.getSellingStatus())
-                .name(requestDto.getName())
-                .price(requestDto.getPrice())
-                .build();
+        Product product = requestDto.toEntity(nextProductNumber);
+        Product savedProduct = productRepository.save(product);
+
+        return ProductResponseDto.of(savedProduct);
     }
 
     private String createNextProductNumber(){
         String latestProductNumber = productRepository.findLatestProductNumber();
+
+        if (latestProductNumber == null) {
+            return "001";
+        }
 
         int latestProductNumberInt = Integer.parseInt(latestProductNumber);
         int nextProductNumberInt = latestProductNumberInt + 1;
