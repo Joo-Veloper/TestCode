@@ -3,10 +3,11 @@ package io.cafekiosk.spring.domain.orderproduct.entity;
 import io.cafekiosk.spring.domain.order.entity.Order;
 import io.cafekiosk.spring.domain.product.entity.Product;
 import io.cafekiosk.spring.domain.util.BaseEntity;
-import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
 
 @Getter
 @Entity

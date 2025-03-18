@@ -3,17 +3,18 @@ package io.cafekiosk.spring.domain.order.entity;
 import io.cafekiosk.spring.domain.orderproduct.entity.OrderProduct;
 import io.cafekiosk.spring.domain.product.entity.Product;
 import io.cafekiosk.spring.domain.util.BaseEntity;
-import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static jakarta.persistence.CascadeType.ALL;
+import static javax.persistence.CascadeType.ALL;
+
 
 @Getter
 @Entity

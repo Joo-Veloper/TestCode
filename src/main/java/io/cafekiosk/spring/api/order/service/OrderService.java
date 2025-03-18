@@ -9,9 +9,9 @@ import io.cafekiosk.spring.domain.product.entity.ProductType;
 import io.cafekiosk.spring.domain.product.repository.ProductRepository;
 import io.cafekiosk.spring.domain.stock.entity.Stock;
 import io.cafekiosk.spring.domain.stock.repository.StockRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;

@@ -1,11 +1,12 @@
 package io.cafekiosk.spring.domain.product.entity;
 
 import io.cafekiosk.spring.domain.util.BaseEntity;
-import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
