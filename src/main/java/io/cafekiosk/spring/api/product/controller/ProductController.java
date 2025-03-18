@@ -19,8 +19,9 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping("/new")
-    public void createProduct(@Valid @RequestBody ProductCreateRequestDto requestDto) {
-        productService.createProduct(requestDto);
+    public ApiResponse<ProductResponseDto> createProduct(@Valid @RequestBody ProductCreateRequestDto requestDto) {
+
+        return ApiResponse.ok(productService.createProduct(requestDto));
     }
 
     @GetMapping("/selling")
