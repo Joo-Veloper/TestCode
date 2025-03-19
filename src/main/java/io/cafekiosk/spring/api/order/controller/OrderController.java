@@ -3,12 +3,14 @@ package io.cafekiosk.spring.api.order.controller;
 import io.cafekiosk.spring.api.order.dto.OrderCreateRequestDto;
 import io.cafekiosk.spring.api.order.dto.OrderResponseDto;
 import io.cafekiosk.spring.api.order.service.OrderService;
+import io.cafekiosk.spring.global.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.time.LocalDateTime;
 
 @RestController
@@ -19,10 +21,10 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping("/new")
-    public OrderResponseDto createOrder(@RequestBody OrderCreateRequestDto requestDto) {
+    public ApiResponse<OrderResponseDto> createOrder(@Valid @RequestBody OrderCreateRequestDto requestDto) {
         LocalDateTime registeredDateTime = LocalDateTime.now();
 
-        return orderService.createOrder(requestDto, registeredDateTime);
+        return ApiResponse.ok(orderService.createOrder(requestDto, registeredDateTime));
     }
 
 }
