@@ -1,7 +1,7 @@
 package io.cafekiosk.spring.api.order.controller;
 
-import io.cafekiosk.spring.api.order.dto.OrderCreateRequestDto;
-import io.cafekiosk.spring.api.order.dto.OrderResponseDto;
+import io.cafekiosk.spring.api.order.dto.request.OrderCreateRequestDto;
+import io.cafekiosk.spring.api.order.dto.response.OrderResponseDto;
 import io.cafekiosk.spring.api.order.service.OrderService;
 import io.cafekiosk.spring.global.response.ApiResponse;
 import lombok.RequiredArgsConstructor;

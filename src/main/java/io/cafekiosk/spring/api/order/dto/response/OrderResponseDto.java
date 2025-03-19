@@ -1,4 +1,4 @@
-package io.cafekiosk.spring.api.order.dto;
+package io.cafekiosk.spring.api.order.dto.response;
 
 import io.cafekiosk.spring.api.product.dto.response.ProductResponseDto;
 import io.cafekiosk.spring.domain.order.entity.Order;

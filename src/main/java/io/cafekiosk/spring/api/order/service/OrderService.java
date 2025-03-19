@@ -1,7 +1,7 @@
 package io.cafekiosk.spring.api.order.service;
 
-import io.cafekiosk.spring.api.order.dto.OrderCreateRequestDto;
-import io.cafekiosk.spring.api.order.dto.OrderResponseDto;
+import io.cafekiosk.spring.api.order.dto.request.OrderCreateRequestDto;
+import io.cafekiosk.spring.api.order.dto.response.OrderResponseDto;
 import io.cafekiosk.spring.domain.order.entity.Order;
 import io.cafekiosk.spring.domain.order.repository.OrderRepository;
 import io.cafekiosk.spring.domain.product.entity.Product;

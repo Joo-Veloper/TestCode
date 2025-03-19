@@ -1,4 +1,4 @@
-package io.cafekiosk.spring.api.order.dto;
+package io.cafekiosk.spring.api.order.dto.request;
 
 import lombok.Builder;
 import lombok.Getter;

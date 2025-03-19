@@ -1,7 +1,7 @@
 package io.cafekiosk.spring.api.order.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.cafekiosk.spring.api.order.dto.OrderCreateRequestDto;
+import io.cafekiosk.spring.api.order.dto.request.OrderCreateRequestDto;
 import io.cafekiosk.spring.api.order.service.OrderService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
