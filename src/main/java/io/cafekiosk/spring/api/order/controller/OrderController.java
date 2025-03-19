@@ -24,7 +24,7 @@ public class OrderController {
     public ApiResponse<OrderResponseDto> createOrder(@Valid @RequestBody OrderCreateRequestDto requestDto) {
         LocalDateTime registeredDateTime = LocalDateTime.now();
 
-        return ApiResponse.ok(orderService.createOrder(requestDto, registeredDateTime));
+        return ApiResponse.ok(orderService.createOrder(requestDto.toServiceRequest() , registeredDateTime));
     }
 
 }

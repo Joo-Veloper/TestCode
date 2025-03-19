@@ -1,5 +1,6 @@
 package io.cafekiosk.spring.api.order.dto.request;
 
+import io.cafekiosk.spring.api.order.service.dto.request.OrderCreateServiceRequestDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,5 +18,11 @@ public class OrderCreateRequestDto {
     @Builder
     private OrderCreateRequestDto(List<String> productNumbers) {
         this.productNumbers = productNumbers;
+    }
+
+    public OrderCreateServiceRequestDto toServiceRequest() {
+        return OrderCreateServiceRequestDto.builder()
+                .productNumbers(productNumbers)
+                .build();
     }
 }

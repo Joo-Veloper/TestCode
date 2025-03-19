@@ -1,7 +1,7 @@
 package io.cafekiosk.spring.api.order.service;
 
-import io.cafekiosk.spring.api.order.dto.request.OrderCreateRequestDto;
 import io.cafekiosk.spring.api.order.dto.response.OrderResponseDto;
+import io.cafekiosk.spring.api.order.service.dto.request.OrderCreateServiceRequestDto;
 import io.cafekiosk.spring.domain.order.entity.Order;
 import io.cafekiosk.spring.domain.order.repository.OrderRepository;
 import io.cafekiosk.spring.domain.product.entity.Product;
@@ -28,7 +28,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final StockRepository stockRepository;
 
-    public OrderResponseDto createOrder(OrderCreateRequestDto requestDto, LocalDateTime registeredDateTime) {
+    public OrderResponseDto createOrder(OrderCreateServiceRequestDto requestDto, LocalDateTime registeredDateTime) {
         List<String> productNumbers = requestDto.getProductNumbers();
         List<Product> products = findProductsBy(productNumbers);
 

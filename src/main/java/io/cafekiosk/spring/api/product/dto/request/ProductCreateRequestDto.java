@@ -1,6 +1,6 @@
 package io.cafekiosk.spring.api.product.dto.request;
 
-import io.cafekiosk.spring.domain.product.entity.Product;
+import io.cafekiosk.spring.api.product.service.dto.request.ProductCreateServiceRequestDto;
 import io.cafekiosk.spring.domain.product.entity.ProductSellingStatus;
 import io.cafekiosk.spring.domain.product.entity.ProductType;
 import lombok.Builder;
@@ -34,9 +34,8 @@ public class ProductCreateRequestDto {
         this.price = price;
     }
 
-    public Product toEntity(String nextProductNumber) {
-        return Product.builder()
-                .productNumber(nextProductNumber)
+    public ProductCreateServiceRequestDto toServiceRequest() {
+        return ProductCreateServiceRequestDto.builder()
                 .type(type)
                 .sellingStatus(sellingStatus)
                 .name(name)
