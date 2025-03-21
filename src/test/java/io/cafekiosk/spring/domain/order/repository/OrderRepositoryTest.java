@@ -15,6 +15,8 @@ import org.springframework.test.context.ActiveProfiles;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static io.cafekiosk.spring.domain.order.entity.OrderStatus.*;
+import static io.cafekiosk.spring.domain.order.entity.OrderStatus.COMPLETED;
 import static io.cafekiosk.spring.domain.product.entity.ProductSellingStatus.SELLING;
 import static io.cafekiosk.spring.domain.product.entity.ProductType.HANDMADE;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -49,18 +51,18 @@ class OrderRepositoryTest {
         Product product = createProduct("001", 1500);
         productRepository.save(product);
 
-        Order completedOrder1 = createOrder(OrderStatus.COMPLETED, startDateTime.plusHours(2), product);
-        Order completedOrder2 = createOrder(OrderStatus.COMPLETED, startDateTime.plusHours(5), product);
-        Order canceledOrder = createOrder(OrderStatus.CANCELED, startDateTime.plusHours(3), product);
+        Order completedOrder1 = createOrder(COMPLETED, startDateTime.plusHours(2), product);
+        Order completedOrder2 = createOrder(COMPLETED, startDateTime.plusHours(5), product);
+        Order canceledOrder = createOrder(CANCELED, startDateTime.plusHours(3), product);
         orderRepository.saveAll(List.of(completedOrder1, completedOrder2, canceledOrder));
 
         // When
-        List<Order> completedOrders = orderRepository.findOrdersBy(startDateTime, endDateTime, OrderStatus.COMPLETED);
+        List<Order> completedOrders = orderRepository.findOrdersBy(startDateTime, endDateTime, COMPLETED);
 
         // Then
         assertThat(completedOrders).hasSize(2)
                 .extracting(Order::getOrderStatus)
-                .containsOnly(OrderStatus.COMPLETED);
+                .containsOnly(COMPLETED);
     }
 
     private Product createProduct(String productNumber, int price) {
