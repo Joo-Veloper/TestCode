@@ -6,14 +6,17 @@ import io.cafekiosk.spring.domain.hisotry.repository.MailSendHistoryRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class MailServiceTest {
@@ -30,8 +33,10 @@ class MailServiceTest {
     @Test
     void sendMail() {
         // given & stubbing
-        when(mailSendClient.sendEmail(anyString(), anyString(), anyString(), anyString()))
-                .thenReturn(true);
+        /*Mockito.when(mailSendClient.sendEmail(anyString(), anyString(), anyString(), anyString()))
+                .thenReturn(true);*/
+        BDDMockito.given(mailSendClient.sendEmail(anyString(), anyString(), anyString(), anyString()))
+                .willReturn(true);
 
         // when
         boolean result = mailService.sendMail("", "", "", "");
