@@ -8,6 +8,24 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 class ProductTypeTest {
+    @DisplayName("상품 타입이 재고 관련 타입인지 체크")
+    @Test
+    void containsStockTypeEx() {
+        ProductType[] productTypes = ProductType.values();
+
+        for (ProductType productType : productTypes) {
+            if (productType == ProductType.HANDMADE) {
+                boolean result = ProductType.containsStockType(productType);
+
+                assertThat(result).isFalse();
+            }
+            if (productType == ProductType.BAKERY || productType == ProductType.BOTTLE) {
+                boolean result = ProductType.containsStockType(productType);
+
+                assertThat(result).isTrue();
+            }
+        }
+    }
 
     @DisplayName("상품 타입이 재고 관련 타입인지를 체크한다.")
     @Test
