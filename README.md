@@ -713,3 +713,39 @@ Product findByIdForUpdate(@Param("id") Long id);
   - `given()`을 사용하면 **사전 조건(Given)이 강조**되어 **테스트의 의도 파악이 쉬움**
 
 ---
+
+### 🏷️ `@ParameterizedTest`란?
+JUnit 5에서 **여러 개의 다른 입력값**을 사용해 **같은 테스트 메서드를 반복 실행**할 수 있도록 도와주는 어노테이션. 📌
+
+---
+
+### 🎯 왜 사용할까?
+✅ **반복되는 테스트 코드 줄이기** 📝  
+✅ **다양한 입력값을 하나의 테스트에서 확인 가능** 🎲  
+✅ **테스트 유지보수 용이** 🛠️
+
+---
+
+### 🎬 사용 예제
+```java
+@ParameterizedTest  // ✅ 여러 개의 입력값을 테스트할 수 있음
+@ValueSource(ints = {1, 2, 3, 4, 5})  // 🎲 입력값을 배열로 전달
+void testIsEven(int number) {  
+    assertTrue(number % 2 == 0, "짝수인지 확인 ❌");
+}
+```
+🔍 위 코드는 `1, 2, 3, 4, 5`를 각각 `number`로 받아 `짝수인지 확인`하는 테스트
+
+---
+
+### 🎭 다양한 데이터 제공 방식
+1️⃣ **배열 값 전달** → `@ValueSource` 🎲  
+2️⃣ **CSV 값 전달** → `@CsvSource` 📑  
+3️⃣ **CSV 파일에서 읽기** → `@CsvFileSource` 📂  
+4️⃣ **메서드에서 값 제공** → `@MethodSource` 🛠️  
+5️⃣ **객체 변환 가능** → `@ArgumentsSource` 🎭
+
+---
+
+### ✅ 결론
+💡 **`@ParameterizedTest`를 사용하면 반복적인 테스트 코드를 줄이고, 다양한 데이터로 쉽게 검증 가능!** 🚀
