@@ -749,3 +749,59 @@ void testIsEven(int number) {
 
 ### ✅ 결론
 💡 **`@ParameterizedTest`를 사용하면 반복적인 테스트 코드를 줄이고, 다양한 데이터로 쉽게 검증 가능!** 🚀
+
+---
+📌 **@DynamicTest** (JUnit 5)  
+JUnit 5에서 **동적 테스트(Dynamic Test)**를 생성할 때 사용하는 애너테이션   
+일반적인 `@Test`는 정적으로 정의되지만, `@DynamicTest`는 실행 시점에 동적으로 테스트를 생성 가능 🚀
+
+---
+
+## 🛠 **특징**
+✅ **동적으로 테스트를 생성 가능**  
+✅ **@Test 대신 사용** (일반적으로 `@TestFactory`와 함께 사용됨)  
+✅ **테스트 케이스를 런타임에 동적으로 만들 수 있음**  
+✅ **Stream, Collection 등을 활용 가능**
+
+---
+
+## 📝 **사용 예시**
+```java
+import org.junit.jupiter.api.DynamicTest;
+import org.junit.jupiter.api.TestFactory;
+
+import java.util.List;
+import java.util.stream.Stream;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+class DynamicTestExample {
+
+    @TestFactory
+    Stream<DynamicTest> dynamicTests() {
+        List<Integer> numbers = List.of(1, 2, 3, 4, 5);
+
+        return numbers.stream()
+                .map(n -> DynamicTest.dynamicTest(
+                        "Checking if " + n + " is positive",
+                        () -> assertTrue(n > 0)
+                ));
+    }
+}
+```
+---
+
+## 🔥 **설명**
+1️⃣ `@TestFactory`를 사용하여 테스트를 동적으로 생성 ✨  
+2️⃣ `List.of(1, 2, 3, 4, 5)` 데이터를 기반으로 `DynamicTest`를 생성 🔄  
+3️⃣ `DynamicTest.dynamicTest("테스트 이름", 실행할 테스트 코드)` 사용 🛠  
+4️⃣ `assertTrue(n > 0)`로 각 숫자가 양수인지 검사 ✅
+
+---
+
+## 🎯 **언제 사용하면 좋은가?**
+📍 **여러 입력 값에 대해 반복 테스트할 때**  
+📍 **테스트 케이스를 런타임에 동적으로 생성해야 할 때**  
+📍 **입력 데이터가 리스트, 컬렉션, 스트림 형태로 존재할 때**
+
+
