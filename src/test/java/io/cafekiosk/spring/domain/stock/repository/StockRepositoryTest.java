@@ -1,18 +1,17 @@
 package io.cafekiosk.spring.domain.stock.repository;
 
+import io.cafekiosk.spring.IntegrationTestSupport;
 import io.cafekiosk.spring.domain.stock.entity.Stock;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
 
-@SpringBootTest
-class StockRepositoryTest {
+class StockRepositoryTest extends IntegrationTestSupport {
     @Autowired
     private StockRepository stockRepository;
 
