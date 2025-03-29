@@ -17,7 +17,7 @@ import static io.cafekiosk.spring.domain.product.entity.ProductSellingStatus.for
  * readOnly = true : 읽기 전용
  * CRUD 에서 CUD 동작 X / Only Read
  * JPA : CUD 스냅샷 저장, 변경감지 안해도 되는 이점 생김( 성능 향상 )
- *
+ * <p>
  * CQRS : Command 와 query 를 분리하자 ( 책임을 분리해서 서로 연관이 없게 하자 )
  *
  * @Transactional(readOnly = true) 전체 달고 메서드별 CUD에 @Transaction을 다시 달아주는방법 추천
@@ -26,11 +26,13 @@ import static io.cafekiosk.spring.domain.product.entity.ProductSellingStatus.for
 @Service
 @RequiredArgsConstructor
 public class ProductService {
+
     private final ProductRepository productRepository;
+    private final ProductNumberFactory productNumberFactory;
 
     @Transactional
     public ProductResponseDto createProduct(ProductCreateServiceRequestDto requestDto) {
-        String nextProductNumber = createNextProductNumber();
+        String nextProductNumber = productNumberFactory.createNextProductNumber();
 
         Product product = requestDto.toEntity(nextProductNumber);
         Product savedProduct = productRepository.save(product);
@@ -45,19 +47,4 @@ public class ProductService {
                 .map(ProductResponseDto::of)
                 .collect(Collectors.toList());
     }
-
-    private String createNextProductNumber() {
-        String latestProductNumber = productRepository.findLatestProductNumber();
-
-        if (latestProductNumber == null) {
-            return "001";
-        }
-
-        int latestProductNumberInt = Integer.parseInt(latestProductNumber);
-        int nextProductNumberInt = latestProductNumberInt + 1;
-
-        // %03d = 9 -> 009, 10 -> 010
-        return String.format("%03d", nextProductNumberInt);
-    }
-
 }
