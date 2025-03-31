@@ -804,4 +804,38 @@ class DynamicTestExample {
 📍 **테스트 케이스를 런타임에 동적으로 생성해야 할 때**  
 📍 **입력 데이터가 리스트, 컬렉션, 스트림 형태로 존재할 때**
 
+---
+## 📝 테스트 원칙 & 개념 정리
+
+ - **테스트 하나 당 목적은 하나!**  
+&nbsp;&nbsp;&nbsp;&nbsp;✅ 단일 책임 원칙 (SRP) 적용  
+&nbsp;&nbsp;&nbsp;&nbsp;✅ 하나의 테스트는 하나의 기능만 검증
+
+- **완벽 제어 🕹️**  
+&nbsp;&nbsp;&nbsp;&nbsp;✅ 테스트 실행 흐름과 데이터 상태를 예측 가능하게 관리
+
+- **테스트 환경의 독립성 🌍**  
+&nbsp;&nbsp;&nbsp;&nbsp;✅ 테스트 실행 전후 상태 초기화  
+&nbsp;&nbsp;&nbsp;&nbsp;✅ 다른 테스트에 영향을 주지 않도록 구성
+
+- **Test Fixture 🏗️**  
+&nbsp;&nbsp;&nbsp;&nbsp;✅ 테스트 실행을 위한 고정된 초기 상태 설정
+
+- **🗑️ deleteAll() vs. deleteAllInBatch()**  
+&nbsp;&nbsp;&nbsp;&nbsp;✅ `deleteAll()` → 엔티티 개별 삭제 (성능↓)  
+&nbsp;&nbsp;&nbsp;&nbsp;✅ `deleteAllInBatch()` → 한 번에 삭제 (성능↑)
+
+- **📌 @ParameterizedTest & @DynamicTest**  
+&nbsp;&nbsp;&nbsp;&nbsp;✅ `@ParameterizedTest` → 다양한 입력값으로 반복 테스트  
+&nbsp;&nbsp;&nbsp;&nbsp;✅ `@DynamicTest` → 런타임에 동적으로 테스트 생성
+
+- **⚙️ 수행 환경 통합**  
+&nbsp;&nbsp;&nbsp;&nbsp;✅ 테스트 환경과 실제 환경을 최대한 유사하게 구성
+
+- **🔒 Private Method Test**  
+&nbsp;&nbsp;&nbsp;&nbsp;✅ 간접적으로 공개 메서드를 통해 테스트  
+&nbsp;&nbsp;&nbsp;&nbsp;✅ Reflection 활용 가능 (하지만 신중하게!)
+
+
+
 
