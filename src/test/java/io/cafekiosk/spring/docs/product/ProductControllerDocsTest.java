@@ -62,6 +62,7 @@ public class ProductControllerDocsTest extends RestDocsSupport {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document("product-create",
+                        preprocessRequest(prettyPrint()),
                         requestFields(
                                 fieldWithPath("type").type(JsonFieldType.STRING)
                                         .description("상품의 타입"),
