@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Clock;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -24,22 +23,18 @@ public class UserService {
     private final UserRepository userRepository;
     private final JavaMailSender mailSender;
 
-    public Optional<User> getById(long id) {
-        return userRepository.findByIdAndStatus(id, UserStatus.ACTIVE);
-    }
-
     public User getByEmail(String email) {
         return userRepository.findByEmailAndStatus(email, UserStatus.ACTIVE)
                 .orElseThrow(() -> new ResourceNotFoundException("Users", email));
     }
 
-    public User getByIdOrElseThrow(long id) {
+    public User getById(long id) {
         return userRepository.findByIdAndStatus(id, UserStatus.ACTIVE)
                 .orElseThrow(() -> new ResourceNotFoundException("Users", id));
     }
 
     @Transactional
-    public User createUser(UserCreateDto userCreateDto) {
+    public User create(UserCreateDto userCreateDto) {
         User user = new User();
         user.setEmail(userCreateDto.getEmail());
         user.setNickname(userCreateDto.getNickname());
@@ -53,8 +48,8 @@ public class UserService {
     }
 
     @Transactional
-    public User updateUser(long id, UserUpdateDto userUpdateDto) {
-        User user = getByIdOrElseThrow(id);
+    public User update(long id, UserUpdateDto userUpdateDto) {
+        User user = getById(id);
         user.setNickname(userUpdateDto.getNickname());
         user.setAddress(userUpdateDto.getAddress());
         user = userRepository.save(user);
