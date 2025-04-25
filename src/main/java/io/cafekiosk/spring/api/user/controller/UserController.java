@@ -3,6 +3,7 @@ package io.cafekiosk.spring.api.user.controller;
 import io.cafekiosk.spring.api.user.dto.MyProfileResponse;
 import io.cafekiosk.spring.api.user.dto.UserResponseDto;
 import io.cafekiosk.spring.api.user.dto.UserUpdateDto;
+import io.cafekiosk.spring.api.user.mapper.UserMapper;
 import io.cafekiosk.spring.api.user.service.UserService;
 import io.cafekiosk.spring.domain.user.entity.User;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -29,13 +30,14 @@ import io.swagger.v3.oas.annotations.Parameter;
 public class UserController {
 
     private final UserService userService;
+    private final UserMapper userMapper;
 
     @ResponseStatus
     @GetMapping("/{id}")
     public ResponseEntity<UserResponseDto> getUserById(@PathVariable long id) {
         return ResponseEntity
                 .ok()
-                .body(userResponseDto(userService.getById(id)));
+                .body(userMapper.userResponseDto(userService.getById(id)));
     }
 
     @GetMapping("/{id}/verify")
@@ -57,7 +59,7 @@ public class UserController {
         userService.login(user.getId());
         return ResponseEntity
                 .ok()
-                .body(toMyProfileResponse(user));
+                .body(userMapper.toMyProfileResponse(user));
     }
 
     @PutMapping("/me")
@@ -71,27 +73,6 @@ public class UserController {
         user = userService.update(user.getId(), userUpdateDto);
         return ResponseEntity
                 .ok()
-                .body(toMyProfileResponse(user));
-    }
-
-    public UserResponseDto userResponseDto(User userEntity) {
-        UserResponseDto userResponseDto = new UserResponseDto();
-        userResponseDto.setId(userEntity.getId());
-        userResponseDto.setEmail(userEntity.getEmail());
-        userResponseDto.setNickname(userEntity.getNickname());
-        userResponseDto.setStatus(userEntity.getStatus());
-        userResponseDto.setLastLoginAt(userEntity.getLastLoginAt());
-        return userResponseDto;
-    }
-
-    public MyProfileResponse toMyProfileResponse(User user) {
-        MyProfileResponse myProfileResponse = new MyProfileResponse();
-        myProfileResponse.setId(user.getId());
-        myProfileResponse.setEmail(user.getEmail());
-        myProfileResponse.setNickname(user.getNickname());
-        myProfileResponse.setStatus(user.getStatus());
-        myProfileResponse.setAddress(user.getAddress());
-        myProfileResponse.setLastLoginAt(user.getLastLoginAt());
-        return myProfileResponse;
+                .body(userMapper.toMyProfileResponse(user));
     }
 }

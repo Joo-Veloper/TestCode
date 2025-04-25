@@ -3,7 +3,7 @@ package io.cafekiosk.spring.api.post.controller;
 import io.cafekiosk.spring.api.post.dto.PostResponseDto;
 import io.cafekiosk.spring.api.post.dto.PostUpdateDto;
 import io.cafekiosk.spring.api.post.service.PostService;
-import io.cafekiosk.spring.api.user.controller.UserController;
+import io.cafekiosk.spring.api.user.mapper.UserMapper;
 import io.cafekiosk.spring.domain.post.entity.Post;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 public class PostController {
 
     private final PostService postService;
-    private final UserController userController;
+    private final UserMapper userMapper;
 
     @GetMapping("/{id}")
     public ResponseEntity<PostResponseDto> getPostById(@PathVariable long id) {
@@ -39,7 +39,7 @@ public class PostController {
         PostResponseDto.setContent(post.getContent());
         PostResponseDto.setCreatedAt(post.getCreatedAt());
         PostResponseDto.setModifiedAt(post.getModifiedAt());
-        PostResponseDto.setWriter(userController.userResponseDto(post.getWriter()));
+        PostResponseDto.setWriter(userMapper.userResponseDto(post.getWriter()));
         return PostResponseDto;
     }
 }

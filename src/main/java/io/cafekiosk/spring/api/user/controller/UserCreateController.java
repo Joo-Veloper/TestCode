@@ -2,6 +2,7 @@ package io.cafekiosk.spring.api.user.controller;
 
 import io.cafekiosk.spring.api.user.dto.UserCreateDto;
 import io.cafekiosk.spring.api.user.dto.UserResponseDto;
+import io.cafekiosk.spring.api.user.mapper.UserMapper;
 import io.cafekiosk.spring.api.user.service.UserService;
 import io.cafekiosk.spring.domain.user.entity.User;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -18,14 +19,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 
 public class UserCreateController {
-    private final UserController userController;
     private final UserService userService;
+    private final UserMapper userMapper;
 
     @PostMapping
     public ResponseEntity<UserResponseDto> createUser(@RequestBody UserCreateDto userCreateDto) {
         User user = userService.create(userCreateDto);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(userController.userResponseDto(user));
+                .body(userMapper.userResponseDto(user));
     }
 }
