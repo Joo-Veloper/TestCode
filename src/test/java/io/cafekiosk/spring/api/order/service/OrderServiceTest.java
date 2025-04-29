@@ -3,6 +3,7 @@ package io.cafekiosk.spring.api.order.service;
 import io.cafekiosk.spring.IntegrationTestSupport;
 import io.cafekiosk.spring.api.order.dto.request.OrderCreateRequestDto;
 import io.cafekiosk.spring.api.order.dto.response.OrderResponseDto;
+import io.cafekiosk.spring.api.order.service.dto.request.OrderCreateServiceRequestDto;
 import io.cafekiosk.spring.domain.order.repository.OrderRepository;
 import io.cafekiosk.spring.domain.orderproduct.repository.OrderProductRepository;
 import io.cafekiosk.spring.domain.product.entity.Product;
@@ -86,17 +87,16 @@ class OrderServiceTest extends IntegrationTestSupport {
         LocalDateTime registeredDateTime = LocalDateTime.now();
 
         Product product1 = createProduct(HANDMADE, "001", 1000);
-        Product product2 = createProduct(HANDMADE, "002", 5000);
-        Product product3 = createProduct(HANDMADE, "003", 10000);
-
+        Product product2 = createProduct(HANDMADE, "002", 3000);
+        Product product3 = createProduct(HANDMADE, "003", 5000);
         productRepository.saveAll(List.of(product1, product2, product3));
 
-        OrderCreateRequestDto requestDto = OrderCreateRequestDto.builder()
+        OrderCreateServiceRequestDto request = OrderCreateServiceRequestDto.builder()
                 .productNumbers(List.of("001", "001"))
                 .build();
 
         // when
-        OrderResponseDto orderResponseDto = orderService.createOrder(requestDto.toServiceRequest(), registeredDateTime);
+        OrderResponseDto orderResponseDto = orderService.createOrder(request, registeredDateTime);
 
         // then
         assertThat(orderResponseDto.getId()).isNotNull();
