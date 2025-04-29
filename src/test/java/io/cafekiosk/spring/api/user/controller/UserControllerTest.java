@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.cafekiosk.spring.api.user.dto.UserStatus;
 import io.cafekiosk.spring.api.user.dto.UserUpdateDto;
 import io.cafekiosk.spring.domain.user.entity.User;
-import io.cafekiosk.spring.domain.user.repository.UserRepository;
+import io.cafekiosk.spring.domain.user.repository.UserJpaRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -31,7 +31,7 @@ class UserControllerTest {
     @Autowired
     private MockMvc mockMvc;
     @Autowired
-    private UserRepository userRepository;
+    private UserJpaRepository userJpaRepository;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
@@ -60,7 +60,7 @@ class UserControllerTest {
         mockMvc.perform(get("/api/users/2/verify")
                         .queryParam("certificationCode", "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaab"))
                 .andExpect(status().isFound());
-        User user = userRepository.findById(2L).get();
+        User user = userJpaRepository.findById(2L).get();
         assertThat(user.getStatus()).isEqualTo(UserStatus.ACTIVE);
     }
 
