@@ -8,8 +8,6 @@ import io.cafekiosk.spring.domain.user.entity.User;
 import io.cafekiosk.spring.global.exception.CertificationCodeNotMatchedException;
 import io.cafekiosk.spring.global.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,7 +19,7 @@ import java.util.UUID;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final JavaMailSender mailSender;
+    private final CertificationService certificationService;
 
     public User getByEmail(String email) {
         return userRepository.findByEmailAndStatus(email, UserStatus.ACTIVE)
@@ -42,8 +40,7 @@ public class UserService {
         user.setStatus(UserStatus.PENDING);
         user.setCertificationCode(UUID.randomUUID().toString());
         user = userRepository.save(user);
-        String certificationUrl = generateCertificationUrl(user);
-        sendCertificationEmail(userCreateDto.getEmail(), certificationUrl);
+        certificationService.send(userCreateDto.getEmail(), user.getId(), user.getCertificationCode());
         return user;
     }
 
@@ -69,17 +66,5 @@ public class UserService {
             throw new CertificationCodeNotMatchedException();
         }
         userEntity.setStatus(UserStatus.ACTIVE);
-    }
-
-    private void sendCertificationEmail(String email, String certificationUrl) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(email);
-        message.setSubject("Please certify your email address");
-        message.setText("Please click the following link to certify your email address: " + certificationUrl);
-        mailSender.send(message);
-    }
-
-    private String generateCertificationUrl(User userEntity) {
-        return "http://localhost:8080/api/users/" + userEntity.getId() + "/verify?certificationCode=" + userEntity.getCertificationCode();
     }
 }
