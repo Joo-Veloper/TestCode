@@ -4,7 +4,7 @@ import io.cafekiosk.spring.api.post.dto.PostResponseDto;
 import io.cafekiosk.spring.api.post.dto.PostUpdateDto;
 import io.cafekiosk.spring.api.post.service.PostService;
 import io.cafekiosk.spring.api.user.mapper.UserMapper;
-import io.cafekiosk.spring.domain.post.entity.Post;
+import io.cafekiosk.spring.domain.post.entity.PostEntity;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -33,13 +33,13 @@ public class PostController {
                 .body(toResponse(postService.update(id, postUpdateDto)));
     }
 
-    public PostResponseDto toResponse(Post post) {
+    public PostResponseDto toResponse(PostEntity postEntity) {
         PostResponseDto PostResponseDto = new PostResponseDto();
-        PostResponseDto.setId(post.getId());
-        PostResponseDto.setContent(post.getContent());
-        PostResponseDto.setCreatedAt(post.getCreatedAt());
-        PostResponseDto.setModifiedAt(post.getModifiedAt());
-        PostResponseDto.setWriter(userMapper.userResponseDto(post.getWriter()));
+        PostResponseDto.setId(postEntity.getId());
+        PostResponseDto.setContent(postEntity.getContent());
+        PostResponseDto.setCreatedAt(postEntity.getCreatedAt());
+        PostResponseDto.setModifiedAt(postEntity.getModifiedAt());
+        PostResponseDto.setWriter(userMapper.userResponseDto(postEntity.getWriter()));
         return PostResponseDto;
     }
 }

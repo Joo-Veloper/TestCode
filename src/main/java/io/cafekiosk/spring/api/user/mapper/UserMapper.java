@@ -2,12 +2,12 @@ package io.cafekiosk.spring.api.user.mapper;
 
 import io.cafekiosk.spring.api.user.dto.MyProfileResponse;
 import io.cafekiosk.spring.api.user.dto.UserResponseDto;
-import io.cafekiosk.spring.domain.user.entity.User;
+import io.cafekiosk.spring.domain.user.entity.UserEntity;
 import org.springframework.stereotype.Component;
 
 @Component
 public class UserMapper {
-    public UserResponseDto userResponseDto(User userEntity) {
+    public UserResponseDto userResponseDto(UserEntity userEntity) {
         UserResponseDto userResponseDto = new UserResponseDto();
         userResponseDto.setId(userEntity.getId());
         userResponseDto.setEmail(userEntity.getEmail());
@@ -17,14 +17,14 @@ public class UserMapper {
         return userResponseDto;
     }
 
-    public MyProfileResponse toMyProfileResponse(User user) {
+    public MyProfileResponse toMyProfileResponse(UserEntity userEntity) {
         MyProfileResponse myProfileResponse = new MyProfileResponse();
-        myProfileResponse.setId(user.getId());
-        myProfileResponse.setEmail(user.getEmail());
-        myProfileResponse.setNickname(user.getNickname());
-        myProfileResponse.setStatus(user.getStatus());
-        myProfileResponse.setAddress(user.getAddress());
-        myProfileResponse.setLastLoginAt(user.getLastLoginAt());
+        myProfileResponse.setId(userEntity.getId());
+        myProfileResponse.setEmail(userEntity.getEmail());
+        myProfileResponse.setNickname(userEntity.getNickname());
+        myProfileResponse.setStatus(userEntity.getStatus());
+        myProfileResponse.setAddress(userEntity.getAddress());
+        myProfileResponse.setLastLoginAt(userEntity.getLastLoginAt());
         return myProfileResponse;
     }
 }

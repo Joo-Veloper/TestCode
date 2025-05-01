@@ -4,7 +4,7 @@ import io.cafekiosk.spring.api.user.dto.UserCreateDto;
 import io.cafekiosk.spring.api.user.dto.UserResponseDto;
 import io.cafekiosk.spring.api.user.mapper.UserMapper;
 import io.cafekiosk.spring.api.user.service.UserService;
-import io.cafekiosk.spring.domain.user.entity.User;
+import io.cafekiosk.spring.domain.user.entity.UserEntity;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,9 +24,9 @@ public class UserCreateController {
 
     @PostMapping
     public ResponseEntity<UserResponseDto> createUser(@RequestBody UserCreateDto userCreateDto) {
-        User user = userService.create(userCreateDto);
+        UserEntity userEntity = userService.create(userCreateDto);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(userMapper.userResponseDto(user));
+                .body(userMapper.userResponseDto(userEntity));
     }
 }

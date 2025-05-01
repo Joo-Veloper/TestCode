@@ -2,7 +2,7 @@ package io.cafekiosk.spring.api.user.service;
 
 import io.cafekiosk.spring.api.user.dto.UserCreateDto;
 import io.cafekiosk.spring.api.user.dto.UserUpdateDto;
-import io.cafekiosk.spring.domain.user.entity.User;
+import io.cafekiosk.spring.domain.user.entity.UserEntity;
 import io.cafekiosk.spring.global.exception.CertificationCodeNotMatchedException;
 import io.cafekiosk.spring.global.exception.ResourceNotFoundException;
 import org.junit.jupiter.api.Test;
@@ -41,7 +41,7 @@ class UserServiceTest {
         //given
         String email = "joo@test.com";
         //when
-        User result = userService.getByEmail(email);
+        UserEntity result = userService.getByEmail(email);
         //then
         assertThat(result.getNickname()).isEqualTo("tester");
     }
@@ -52,7 +52,7 @@ class UserServiceTest {
         String email = "joo1@test.com";
         //when & then
         assertThatThrownBy(() -> {
-            User result = userService.getByEmail(email);
+            UserEntity result = userService.getByEmail(email);
         }).isInstanceOf(ResourceNotFoundException.class);
     }
     @Test
@@ -60,7 +60,7 @@ class UserServiceTest {
         //given
         String email = "joo@test.com";
         //when
-        User result = userService.getById(1);
+        UserEntity result = userService.getById(1);
         //then
         assertThat(result.getNickname()).isEqualTo("tester");
     }
@@ -71,7 +71,7 @@ class UserServiceTest {
         String email = "joo1@test.com";
         //when & then
         assertThatThrownBy(() -> {
-            User result = userService.getById(2);
+            UserEntity result = userService.getById(2);
         }).isInstanceOf(ResourceNotFoundException.class);
     }
 
@@ -85,7 +85,7 @@ class UserServiceTest {
                 .build();
         BDDMockito.doNothing().when(mailSender).send(any(SimpleMailMessage.class));
         //when
-        User result = userService.create(userCreateDto);
+        UserEntity result = userService.create(userCreateDto);
         //then
         assertThat(result.getId()).isNotNull();
         assertThat(result.getStatus()).isEqualTo(PENDING);
@@ -104,10 +104,10 @@ class UserServiceTest {
         userService.update(1, userUpdateDto);
 
         //then
-        User user = userService.getById(1);
-        assertThat(user.getId()).isNotNull();
-        assertThat(user.getNickname()).isEqualTo("tester1");
-        assertThat(user.getAddress()).isEqualTo("Inchon");
+        UserEntity userEntity = userService.getById(1);
+        assertThat(userEntity.getId()).isNotNull();
+        assertThat(userEntity.getNickname()).isEqualTo("tester1");
+        assertThat(userEntity.getAddress()).isEqualTo("Inchon");
     }
 
     @Test
@@ -116,8 +116,8 @@ class UserServiceTest {
         userService.login(1 );
 
         //then
-        User user = userService.getById(1);
-        assertThat(user.getLastLoginAt()).isGreaterThan(0L);
+        UserEntity userEntity = userService.getById(1);
+        assertThat(userEntity.getLastLoginAt()).isGreaterThan(0L);
 //        assertThat(result.getCertificationCode()).isEqualTo("나중수정");
     }
 
@@ -127,8 +127,8 @@ class UserServiceTest {
         userService.verifyEmail(2, "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaab");
 
         //then
-        User user = userService.getById(2);
-        assertThat(user.getStatus()).isEqualTo(ACTIVE);
+        UserEntity userEntity = userService.getById(2);
+        assertThat(userEntity.getStatus()).isEqualTo(ACTIVE);
     }
 
     @Test

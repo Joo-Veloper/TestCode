@@ -1,16 +1,16 @@
 package io.cafekiosk.spring.api.user.service.port;
 
 import io.cafekiosk.spring.api.user.dto.UserStatus;
-import io.cafekiosk.spring.domain.user.entity.User;
+import io.cafekiosk.spring.domain.user.entity.UserEntity;
 
 import java.util.Optional;
 
 public interface UserRepository {
-    Optional<User> findById(long id);
+    Optional<UserEntity> findById(long id);
 
-    Optional<User> findByIdAndStatus(long id, UserStatus userStatus);
+    Optional<UserEntity> findByIdAndStatus(long id, UserStatus userStatus);
 
-    Optional<User> findByEmailAndStatus(String email, UserStatus userStatus);
+    Optional<UserEntity> findByEmailAndStatus(String email, UserStatus userStatus);
 
-    User save(User user);
+    UserEntity save(UserEntity userEntity);
 }

@@ -1,11 +1,11 @@
 package io.cafekiosk.spring.api.post.service.port;
 
-import io.cafekiosk.spring.domain.post.entity.Post;
+import io.cafekiosk.spring.domain.post.entity.PostEntity;
 
 import java.util.Optional;
 
 public interface PostRepository {
-    Optional<Post> findById(long id);
+    Optional<PostEntity> findById(long id);
 
-    Post save(Post post);
+    PostEntity save(PostEntity postEntity);
 }

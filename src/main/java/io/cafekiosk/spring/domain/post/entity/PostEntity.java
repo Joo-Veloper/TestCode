@@ -1,6 +1,6 @@
 package io.cafekiosk.spring.domain.post.entity;
 
-import io.cafekiosk.spring.domain.user.entity.User;
+import io.cafekiosk.spring.domain.user.entity.UserEntity;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Entity
 @Setter
 @Table(name = "posts")
-public class Post {
+public class PostEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -26,5 +26,5 @@ public class Post {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User writer;
+    private UserEntity writer;
 }

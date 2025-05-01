@@ -5,7 +5,7 @@ import io.cafekiosk.spring.api.user.dto.UserResponseDto;
 import io.cafekiosk.spring.api.user.dto.UserUpdateDto;
 import io.cafekiosk.spring.api.user.mapper.UserMapper;
 import io.cafekiosk.spring.api.user.service.UserService;
-import io.cafekiosk.spring.domain.user.entity.User;
+import io.cafekiosk.spring.domain.user.entity.UserEntity;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -55,11 +55,11 @@ public class UserController {
             @Parameter(name = "EMAIL", in = ParameterIn.HEADER)
             @RequestHeader("EMAIL") String email // 일반적으로 스프링 시큐리티를 사용한다면 UserPrincipal 에서 가져옵니다.
     ) {
-        User user = userService.getByEmail(email);
-        userService.login(user.getId());
+        UserEntity userEntity = userService.getByEmail(email);
+        userService.login(userEntity.getId());
         return ResponseEntity
                 .ok()
-                .body(userMapper.toMyProfileResponse(user));
+                .body(userMapper.toMyProfileResponse(userEntity));
     }
 
     @PutMapping("/me")
@@ -69,10 +69,10 @@ public class UserController {
             @RequestHeader("EMAIL") String email, // 일반적으로 스프링 시큐리티를 사용한다면 UserPrincipal 에서 가져옵니다.
             @RequestBody UserUpdateDto userUpdateDto
     ) {
-        User user = userService.getByEmail(email);
-        user = userService.update(user.getId(), userUpdateDto);
+        UserEntity userEntity = userService.getByEmail(email);
+        userEntity = userService.update(userEntity.getId(), userUpdateDto);
         return ResponseEntity
                 .ok()
-                .body(userMapper.toMyProfileResponse(user));
+                .body(userMapper.toMyProfileResponse(userEntity));
     }
 }
