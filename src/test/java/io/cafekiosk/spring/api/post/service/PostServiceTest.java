@@ -2,7 +2,7 @@ package io.cafekiosk.spring.api.post.service;
 
 import io.cafekiosk.spring.api.post.dto.PostCreateDto;
 import io.cafekiosk.spring.api.post.dto.PostUpdateDto;
-import io.cafekiosk.spring.domain.post.entity.PostEntity;
+import io.cafekiosk.spring.domain.post.entity.Post;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -26,7 +26,7 @@ class PostServiceTest {
     @Test
     void getById는_존재하는_게시물을_내려준다() {
         //given & when
-        PostEntity result = postService.getById(1);
+        Post result = postService.getById(1);
 
         //then
         assertThat(result.getContent()).isEqualTo("helloWorld");
@@ -41,7 +41,7 @@ class PostServiceTest {
                 .content("testContent")
                 .build();
         //when
-        PostEntity result = postService.create(postCreateDto);
+        Post result = postService.create(postCreateDto);
 
         //then
         assertThat(result.getId()).isNotNull();
@@ -60,8 +60,8 @@ class PostServiceTest {
         postService.update(1, postUpdateDto);
 
         //then
-        PostEntity postEntity = postService.getById(1);
-        assertThat(postEntity.getContent()).isEqualTo("updateContent");
-        assertThat(postEntity.getModifiedAt()).isGreaterThan(0);
+        Post post = postService.getById(1);
+        assertThat(post.getContent()).isEqualTo("updateContent");
+        assertThat(post.getModifiedAt()).isGreaterThan(0);
     }
 }

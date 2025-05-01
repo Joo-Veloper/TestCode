@@ -3,9 +3,8 @@ package io.cafekiosk.spring.api.user.controller;
 import io.cafekiosk.spring.api.user.dto.MyProfileResponse;
 import io.cafekiosk.spring.api.user.dto.UserResponseDto;
 import io.cafekiosk.spring.api.user.dto.UserUpdateDto;
-import io.cafekiosk.spring.api.user.mapper.UserMapper;
 import io.cafekiosk.spring.api.user.service.UserService;
-import io.cafekiosk.spring.domain.user.entity.UserEntity;
+import io.cafekiosk.spring.domain.user.entity.User;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -30,14 +29,13 @@ import io.swagger.v3.oas.annotations.Parameter;
 public class UserController {
 
     private final UserService userService;
-    private final UserMapper userMapper;
 
     @ResponseStatus
     @GetMapping("/{id}")
     public ResponseEntity<UserResponseDto> getUserById(@PathVariable long id) {
         return ResponseEntity
                 .ok()
-                .body(userMapper.userResponseDto(userService.getById(id)));
+                .body(UserResponseDto.from(userService.getById(id)));
     }
 
     @GetMapping("/{id}/verify")
@@ -55,11 +53,11 @@ public class UserController {
             @Parameter(name = "EMAIL", in = ParameterIn.HEADER)
             @RequestHeader("EMAIL") String email // 일반적으로 스프링 시큐리티를 사용한다면 UserPrincipal 에서 가져옵니다.
     ) {
-        UserEntity userEntity = userService.getByEmail(email);
-        userService.login(userEntity.getId());
+        User user = userService.getByEmail(email);
+        userService.login(user.getId());
         return ResponseEntity
                 .ok()
-                .body(userMapper.toMyProfileResponse(userEntity));
+                .body(MyProfileResponse.from(user));
     }
 
     @PutMapping("/me")
@@ -69,10 +67,11 @@ public class UserController {
             @RequestHeader("EMAIL") String email, // 일반적으로 스프링 시큐리티를 사용한다면 UserPrincipal 에서 가져옵니다.
             @RequestBody UserUpdateDto userUpdateDto
     ) {
-        UserEntity userEntity = userService.getByEmail(email);
-        userEntity = userService.update(userEntity.getId(), userUpdateDto);
+        User user = userService.getByEmail(email);
+        user = userService.update(user.getId(), userUpdateDto);
         return ResponseEntity
                 .ok()
-                .body(userMapper.toMyProfileResponse(userEntity));
+                .body(MyProfileResponse.from(user));
     }
+
 }
