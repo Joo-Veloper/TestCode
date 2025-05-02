@@ -5,6 +5,8 @@ import io.cafekiosk.spring.api.user.dto.UserStatus;
 import io.cafekiosk.spring.api.user.dto.UserUpdateDto;
 import io.cafekiosk.spring.api.user.service.port.UserRepository;
 import io.cafekiosk.spring.domain.user.entity.User;
+import io.cafekiosk.spring.global.common.service.port.ClockHolder;
+import io.cafekiosk.spring.global.common.service.port.UuidHolder;
 import io.cafekiosk.spring.global.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,8 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final CertificationService certificationService;
+    private final UuidHolder uuidHolder;
+    private final ClockHolder clockHolder;
 
     public User getByEmail(String email) {
         return userRepository.findByEmailAndStatus(email, UserStatus.ACTIVE)
@@ -29,7 +33,7 @@ public class UserService {
 
     @Transactional
     public User create(UserCreateDto userCreateDto) {
-        User user = User.from(userCreateDto);
+        User user = User.from(userCreateDto, uuidHolder);
         user = userRepository.save(user);
         certificationService.send(userCreateDto.getEmail(), user.getId(), user.getCertificationCode());
         return user;
@@ -46,7 +50,7 @@ public class UserService {
     @Transactional
     public void login(long id) {
         User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Users", id));
-        user = user.login();
+        user = user.login(clockHolder);
         userRepository.save(user);
     }
 

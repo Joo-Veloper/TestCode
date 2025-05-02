@@ -3,12 +3,11 @@ package io.cafekiosk.spring.domain.user.entity;
 import io.cafekiosk.spring.api.user.dto.UserCreateDto;
 import io.cafekiosk.spring.api.user.dto.UserStatus;
 import io.cafekiosk.spring.api.user.dto.UserUpdateDto;
+import io.cafekiosk.spring.global.common.service.port.ClockHolder;
+import io.cafekiosk.spring.global.common.service.port.UuidHolder;
 import io.cafekiosk.spring.global.exception.CertificationCodeNotMatchedException;
 import lombok.Builder;
 import lombok.Getter;
-
-import java.time.Clock;
-import java.util.UUID;
 
 @Getter
 public class User {
@@ -31,13 +30,13 @@ public class User {
         this.lastLoginAt = lastLoginAt;
     }
 
-    public static User from(UserCreateDto userCreateDto) {
+    public static User from(UserCreateDto userCreateDto, UuidHolder uuidHolder) {
         return User.builder()
                 .email(userCreateDto.getEmail())
                 .nickname(userCreateDto.getNickname())
                 .address(userCreateDto.getAddress())
                 .status(UserStatus.PENDING)
-                .certificationCode(UUID.randomUUID().toString())
+                .certificationCode(uuidHolder.random())
                 .build();
     }
 
@@ -53,7 +52,7 @@ public class User {
                 .build();
     }
 
-    public User login() {
+    public User login(ClockHolder clockHolder) {
         return User.builder()
                 .id(id)
                 .email(email)
@@ -61,7 +60,7 @@ public class User {
                 .address(address)
                 .certificationCode(certificationCode)
                 .status(status)
-                .lastLoginAt(Clock.systemUTC().millis())
+                .lastLoginAt(clockHolder.mills())
                 .build();
 
     }
