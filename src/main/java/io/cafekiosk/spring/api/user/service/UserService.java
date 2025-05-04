@@ -8,11 +8,13 @@ import io.cafekiosk.spring.domain.user.entity.User;
 import io.cafekiosk.spring.global.common.service.port.ClockHolder;
 import io.cafekiosk.spring.global.common.service.port.UuidHolder;
 import io.cafekiosk.spring.global.exception.ResourceNotFoundException;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Builder
 @RequiredArgsConstructor
 public class UserService {
 
