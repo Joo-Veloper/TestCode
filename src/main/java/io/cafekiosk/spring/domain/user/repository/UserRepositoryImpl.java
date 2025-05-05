@@ -4,6 +4,7 @@ import io.cafekiosk.spring.api.user.dto.UserStatus;
 import io.cafekiosk.spring.api.user.service.port.UserRepository;
 import io.cafekiosk.spring.domain.user.entity.User;
 import io.cafekiosk.spring.domain.user.entity.UserEntity;
+import io.cafekiosk.spring.global.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -13,6 +14,11 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserRepositoryImpl implements UserRepository {
     private final UserJpaRepository userJpaRepository;
+
+    @Override
+    public User getById(long id) {
+        return findById(id).orElseThrow(() -> new ResourceNotFoundException("Users", id));
+    }
 
     @Override
     public Optional<User> findById(long id) {

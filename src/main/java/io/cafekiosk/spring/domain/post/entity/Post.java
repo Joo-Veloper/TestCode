@@ -3,10 +3,9 @@ package io.cafekiosk.spring.domain.post.entity;
 import io.cafekiosk.spring.api.post.dto.PostCreateDto;
 import io.cafekiosk.spring.api.post.dto.PostUpdateDto;
 import io.cafekiosk.spring.domain.user.entity.User;
+import io.cafekiosk.spring.global.common.service.port.ClockHolder;
 import lombok.Builder;
 import lombok.Getter;
-
-import java.time.Clock;
 
 @Getter
 public class Post {
@@ -26,20 +25,20 @@ public class Post {
     }
 
 
-    public static Post from(User writer, PostCreateDto postCreateDto) {
+    public static Post from(User writer, PostCreateDto postCreateDto, ClockHolder clockHolder) {
         return Post.builder()
                 .content(postCreateDto.getContent())
                 .writer(writer)
-                .createdAt(Clock.systemUTC().millis())
+                .createdAt(clockHolder.mills())
                 .build();
     }
 
-    public Post update(PostUpdateDto postUpdateDto) {
+    public Post update(PostUpdateDto postUpdateDto, ClockHolder clockHolder) {
         return Post.builder()
                 .id(id)
                 .content(postUpdateDto.getContent())
                 .createdAt(createdAt)
-                .modifiedAt(Clock.systemUTC().millis())
+                .modifiedAt(clockHolder.mills())
                 .writer(writer)
                 .build();
     }
