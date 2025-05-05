@@ -32,7 +32,7 @@ public class OrderService {
         List<String> productNumbers = requestDto.getProductNumbers();
         List<Product> products = findProductsBy(productNumbers);
 
-        deductStuckQuantities(products);
+        deductStockQuantities(products);
 
         Order order = Order.create(products, registeredDateTime);
         Order savedOrder = orderRepository.save(order);
@@ -40,10 +40,10 @@ public class OrderService {
         return OrderResponseDto.of(savedOrder);
     }
 
-    private void deductStuckQuantities(List<Product> products) {
+    private void deductStockQuantities(List<Product> products) {
         List<String> stockProductNumbers = extractStockProductNumbers(products);
         Map<String, Stock> stockMap = createStockMapBy(stockProductNumbers);
-        Map<String, Long> productCountingMap = CreateCountingMapBy(stockProductNumbers);
+        Map<String, Long> productCountingMap = createCountingMapBy(stockProductNumbers);
 
         for (String stockProductNumber : new HashSet<>(stockProductNumbers)) {
             Stock stock = stockMap.get(stockProductNumber);
@@ -81,7 +81,7 @@ public class OrderService {
                 .collect(Collectors.toMap(Stock::getProductNumber, s -> s));
     }
 
-    private Map<String, Long> CreateCountingMapBy(List<String> stockProductNumbers) {
+    private Map<String, Long> createCountingMapBy(List<String> stockProductNumbers) {
         
         return stockProductNumbers.stream()
                 .collect(Collectors.groupingBy(p -> p, Collectors.counting()));
