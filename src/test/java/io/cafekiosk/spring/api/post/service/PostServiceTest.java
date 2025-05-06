@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class PostServiceTest {
 
     @Autowired
-    private PostService postService;
+    private PostServiceImpl postService;
 
     @Test
     void getById는_존재하는_게시물을_내려준다() {

@@ -1,5 +1,6 @@
 package io.cafekiosk.spring.api.post.service;
 
+import io.cafekiosk.spring.api.post.controller.port.PostService;
 import io.cafekiosk.spring.api.post.dto.PostCreateDto;
 import io.cafekiosk.spring.api.post.dto.PostUpdateDto;
 import io.cafekiosk.spring.api.post.service.port.PostRepository;
@@ -15,7 +16,7 @@ import org.springframework.stereotype.Service;
 @Service
 @Builder
 @RequiredArgsConstructor
-public class PostService {
+public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
     private final UserRepository userRepository;

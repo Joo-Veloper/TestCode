@@ -1,52 +1,48 @@
 package io.cafekiosk.spring.api.post.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import io.cafekiosk.spring.api.mock.TestContainer;
 import io.cafekiosk.spring.api.post.dto.PostCreateDto;
+import io.cafekiosk.spring.api.post.dto.PostResponseDto;
+import io.cafekiosk.spring.api.user.dto.UserStatus;
+import io.cafekiosk.spring.domain.user.entity.User;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.jdbc.SqlGroup;
-import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest
-@AutoConfigureMockMvc
-@AutoConfigureTestDatabase
-@SqlGroup({
-        @Sql(value = "/sql/post-create-controller-test-data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
-        @Sql(value = "/sql/delete-all-data.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-})
 class PostCreateControllerTest {
-    @Autowired
-    private MockMvc mockMvc;
-    private final ObjectMapper objectMapper = new ObjectMapper();
+
 
     @Test
-    void 사용자는_회원_가입을_할_수_있고_회원가입된_사용자는_PENDING_상태이다() throws Exception {
-        //given
+    void 사용자는_회원_가입을_할_수_있고_회원가입된_사용자는_PENDING_상태이다() {
+        // given
+        TestContainer testContainer = TestContainer.builder()
+                .clockHolder(() -> 1678530673958L)
+                .build();
+        testContainer.userRepository.save(User.builder()
+                .id(1L)
+                .email("joo@test.com")
+                .nickname("tester")
+                .address("Seoul")
+                .status(UserStatus.ACTIVE)
+                .certificationCode("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa")
+                .lastLoginAt(100L)
+                .build()
+        );
         PostCreateDto postCreateDto = PostCreateDto.builder()
                 .writerId(1)
-                .content("helloworld")
+                .content("helloWorld")
                 .build();
 
-        // when & then
-        mockMvc.perform(
-                        post("/api/posts")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(postCreateDto)))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").isNumber())
-                .andExpect(jsonPath("$.content").value("helloworld"))
-                .andExpect(jsonPath("$.writer.id").isNumber())
-                .andExpect(jsonPath("$.writer.email").value("joo@test.com"))
-                .andExpect(jsonPath("$.writer.nickname").value("tester"));
+        //when
+        ResponseEntity<PostResponseDto> result = testContainer.postCreateController.createPost(postCreateDto);
 
+        //then
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.valueOf(201));
+        assertThat(result.getBody()).isNotNull();
+        assertThat(result.getBody().getContent()).isEqualTo("helloWorld");
+        assertThat(result.getBody().getWriter().getNickname()).isEqualTo("tester");
+        assertThat(result.getBody().getCreatedAt()).isEqualTo(1678530673958L);
     }
 }

@@ -1,74 +1,101 @@
 package io.cafekiosk.spring.api.post.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import io.cafekiosk.spring.api.mock.TestContainer;
+import io.cafekiosk.spring.api.post.dto.PostResponseDto;
 import io.cafekiosk.spring.api.post.dto.PostUpdateDto;
+import io.cafekiosk.spring.api.user.dto.UserStatus;
+import io.cafekiosk.spring.domain.post.entity.Post;
+import io.cafekiosk.spring.domain.user.entity.User;
+import io.cafekiosk.spring.global.exception.ResourceNotFoundException;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.jdbc.SqlGroup;
-import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@SpringBootTest
-@AutoConfigureMockMvc
-@AutoConfigureTestDatabase
-@SqlGroup({
-//        @Sql(value = "/sql/post-create-controller-test-data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
-        @Sql(value = "/sql/post-controller-test-data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
-        @Sql(value = "/sql/delete-all-data.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-})
+
 public class PostControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
-    private final ObjectMapper objectMapper = new ObjectMapper();
-
     @Test
-    void 사용자는_게시물을_단건_조회_할_수_있다() throws Exception {
+    void 사용자는_게시물을_단건_조회_할_수_있다() {
 
-        mockMvc.perform(get("/api/posts/1"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").isNumber())
-                .andExpect(jsonPath("$.content").value("helloWorld"))
-                .andExpect(jsonPath("$.writer.id").isNumber())
-                .andExpect(jsonPath("$.writer.email").value("joo@test.com"))
-                .andExpect(jsonPath("$.writer.nickname").value("tester"));
-    }
-
-    @Test
-    void 사용자가_존재하지_않는_게시물을_조회할_경우_에러가_난다() throws Exception {
-
-        mockMvc.perform(get("/api/posts/123456789"))
-                .andExpect(status().isNotFound())
-                .andExpect(content().string("Posts에서 ID 123456789를 찾을 수 없습니다."));
-    }
-
-    @Test
-    void 사용자는_게시물을_수정할_수_있다() throws Exception {
         // given
-        PostUpdateDto postUpdateDto = PostUpdateDto.builder()
-                .content("helloWorld")
+        TestContainer testContainer = TestContainer.builder()
                 .build();
+        User user = User.builder()
+                .id(1L)
+                .email("joo@test.com")
+                .nickname("tester")
+                .address("Seoul")
+                .status(UserStatus.ACTIVE)
+                .certificationCode("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa")
+                .lastLoginAt(100L)
+                .build();
+        testContainer.userRepository.save(user);
+        testContainer.postRepository.save(Post.builder()
+                .id(1L)
+                .content("helloWorld")
+                .writer(user)
+                .createdAt(100L)
+                .build());
 
-        // when & then
-        mockMvc.perform(
-                        put("/api/posts/1")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(postUpdateDto)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").isNumber())
-                .andExpect(jsonPath("$.content").value("helloWorld"))
-                .andExpect(jsonPath("$.writer.id").isNumber())
-                .andExpect(jsonPath("$.writer.email").value("joo@test.com"))
-                .andExpect(jsonPath("$.writer.nickname").value("tester"));
+        //when
+        ResponseEntity<PostResponseDto> result = testContainer.postController.getPostById(1L);
+
+        //then
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.valueOf(200));
+        assertThat(result.getBody()).isNotNull();
+        assertThat(result.getBody().getContent()).isEqualTo("helloWorld");
+        assertThat(result.getBody().getWriter().getNickname()).isEqualTo("tester");
+        assertThat(result.getBody().getCreatedAt()).isEqualTo(100L);
+    }
+
+    @Test
+    void 사용자가_존재하지_않는_게시물을_조회할_경우_에러가_난다() {
+
+        //given
+        TestContainer testContainer = TestContainer.builder().build();
+
+        //when & then
+        assertThatThrownBy(() -> {
+            testContainer.postController.getPostById(1);
+        }).isInstanceOf(ResourceNotFoundException.class);
+    }
+
+    @Test
+    void 사용자는_게시물을_수정할_수_있다() throws Exception {// given
+        TestContainer testContainer = TestContainer.builder()
+                .clockHolder(() -> 200L)
+                .build();
+        User user = User.builder()
+                .id(1L)
+                .email("joo@test.com")
+                .nickname("tester")
+                .address("Seoul")
+                .status(UserStatus.ACTIVE)
+                .certificationCode("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaab")
+                .lastLoginAt(100L)
+                .build();
+        testContainer.userRepository.save(user);
+        testContainer.postRepository.save(Post.builder()
+                .id(1L)
+                .content("helloWorld")
+                .writer(user)
+                .createdAt(100L)
+                .build());
+
+        //when
+        ResponseEntity<PostResponseDto> result = testContainer.postController.updatePost(1L, PostUpdateDto.builder()
+                .content("foobar")
+                .build());
+
+        //then
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.valueOf(200));
+        assertThat(result.getBody()).isNotNull();
+        assertThat(result.getBody().getContent()).isEqualTo("foobar");
+        assertThat(result.getBody().getWriter().getNickname()).isEqualTo("tester");
+        assertThat(result.getBody().getCreatedAt()).isEqualTo(100L);
+        assertThat(result.getBody().getModifiedAt()).isEqualTo(200L);
     }
 }
