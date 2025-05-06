@@ -1,5 +1,6 @@
 package io.cafekiosk.spring.api.user.service;
 
+import io.cafekiosk.spring.api.user.controller.port.*;
 import io.cafekiosk.spring.api.user.dto.UserCreateDto;
 import io.cafekiosk.spring.api.user.dto.UserStatus;
 import io.cafekiosk.spring.api.user.dto.UserUpdateDto;
@@ -16,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Builder
 @RequiredArgsConstructor
-public class UserService {
+public class UserServiceImpl implements UserCreateService, UserReadService, UserUpdateService, AuthenticationService {
 
     private final UserRepository userRepository;
     private final CertificationService certificationService;

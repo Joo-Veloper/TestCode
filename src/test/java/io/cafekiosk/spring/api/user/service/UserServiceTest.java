@@ -31,7 +31,7 @@ import static org.mockito.ArgumentMatchers.any;
 class UserServiceTest {
 
     @Autowired
-    private UserService userService;
+    private UserServiceImpl userService;
 
     @MockBean
     private JavaMailSender mailSender;
