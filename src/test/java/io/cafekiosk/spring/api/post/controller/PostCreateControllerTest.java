@@ -36,7 +36,7 @@ class PostCreateControllerTest {
                 .build();
 
         //when
-        ResponseEntity<PostResponseDto> result = testContainer.postCreateController.createPost(postCreateDto);
+        ResponseEntity<PostResponseDto> result = testContainer.postCreateController.create(postCreateDto);
 
         //then
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.valueOf(201));

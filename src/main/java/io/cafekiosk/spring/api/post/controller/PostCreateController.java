@@ -23,7 +23,7 @@ public class PostCreateController {
     private final PostService postService;
 
     @PostMapping
-    public ResponseEntity<PostResponseDto> createPost(@RequestBody PostCreateDto postCreateDto) {
+    public ResponseEntity<PostResponseDto> create(@RequestBody PostCreateDto postCreateDto) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(PostResponseDto.from(postService.create(postCreateDto)));

@@ -39,6 +39,6 @@ public class UserRepositoryImpl implements UserRepository {
     public User save(User user) {
         // 저장은 반대로 도메인 객체를 영속성 객체로 변환 메서드
         // user.toEntity()로 하는 것도 좋지만 domain은 Infra Layer 의 정보를 모르는 것이 좋다.
-        return userJpaRepository.save(UserEntity.fromModel(user)).toModel();
+        return userJpaRepository.save(UserEntity.from(user)).toModel();
     }
 }
