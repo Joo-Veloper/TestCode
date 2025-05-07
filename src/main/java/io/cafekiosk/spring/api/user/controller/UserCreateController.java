@@ -1,6 +1,6 @@
 package io.cafekiosk.spring.api.user.controller;
 
-import io.cafekiosk.spring.api.user.controller.port.UserCreateService;
+import io.cafekiosk.spring.api.user.controller.port.UserService;
 import io.cafekiosk.spring.api.user.dto.UserCreateDto;
 import io.cafekiosk.spring.api.user.dto.UserResponseDto;
 import io.cafekiosk.spring.domain.user.entity.User;
@@ -22,11 +22,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 public class UserCreateController {
 
-    private final UserCreateService userCreateService;
+    private final UserService userService;
 
     @PostMapping
     public ResponseEntity<UserResponseDto> createUser(@RequestBody UserCreateDto userCreateDto) {
-        User user = userCreateService.create(userCreateDto);
+        User user = userService.create(userCreateDto);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(UserResponseDto.from(user));

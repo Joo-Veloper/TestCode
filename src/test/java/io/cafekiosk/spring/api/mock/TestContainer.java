@@ -7,10 +7,6 @@ import io.cafekiosk.spring.api.post.service.PostServiceImpl;
 import io.cafekiosk.spring.api.post.service.port.PostRepository;
 import io.cafekiosk.spring.api.user.controller.UserController;
 import io.cafekiosk.spring.api.user.controller.UserCreateController;
-import io.cafekiosk.spring.api.user.controller.port.AuthenticationService;
-import io.cafekiosk.spring.api.user.controller.port.UserCreateService;
-import io.cafekiosk.spring.api.user.controller.port.UserReadService;
-import io.cafekiosk.spring.api.user.controller.port.UserUpdateService;
 import io.cafekiosk.spring.api.user.service.CertificationService;
 import io.cafekiosk.spring.api.user.service.UserServiceImpl;
 import io.cafekiosk.spring.api.user.service.port.MailSender;
@@ -24,10 +20,6 @@ public class TestContainer {
     public final MailSender mailSender;
     public final UserRepository userRepository;
     public final PostRepository postRepository;
-    public final UserReadService userReadService;
-    public final UserCreateService userCreateService;
-    public final UserUpdateService userUpdateService;
-    public final AuthenticationService authenticationService;
     public final PostService postService;
     public final CertificationService certificationService;
     public final UserController userController;
@@ -52,18 +44,11 @@ public class TestContainer {
                 .userRepository(this.userRepository)
                 .certificationService(this.certificationService)
                 .build();
-        this.userReadService = userService;
-        this.userCreateService = userService;
-        this.userUpdateService = userService;
-        this.authenticationService = userService;
         this.userController = UserController.builder()
-                .userReadService(userReadService)
-                .userCreateService(userCreateService)
-                .userUpdateService(userUpdateService)
-                .authenticationService(authenticationService)
+                .userService(userService)
                 .build();
         this.userCreateController = UserCreateController.builder()
-                .userCreateService(userCreateService)
+                .userService(userService)
                 .build();
         this.postController = PostController.builder()
                 .postService(postService)
