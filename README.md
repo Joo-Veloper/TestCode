@@ -239,7 +239,7 @@ TDD(Test-Driven Development, 테스트 주도 개발)는 테스트를 먼저 작
         assertThat(totalPrice).isEqualTo(8500);
     }
 ```
-![img.png](img.png)
+![img.png](img/img.png)
 - calculateTotalPrice() 메서드가 아직 구현되지 않았으므로 테스트가 실패함.
 
 #### 📌 GREEN 단계 (최소한의 구현 코드 작성)
@@ -249,7 +249,7 @@ TDD(Test-Driven Development, 테스트 주도 개발)는 테스트를 먼저 작
     return 8500;
 }
 ```
-![img_2.png](img_2.png)
+![img_2.png](img/img_2.png)
 - 테스트를 통과하도록 가장 간단한 코드로 기능을 구현함.
 - 하지만 하드코딩된 값을 사용하여 확장성이 부족함.
 
@@ -265,7 +265,7 @@ public int calculateTotalPrice() {
     return totalPrice;
 }
 ```
-![img_2.png](img_2.png)
+![img_2.png](img/img_2.png)
 - Beverage 객체의 getPrice() 메서드를 활용하여 동적으로 총 가격을 계산하도록 개선.
 #### 📌 REFACTORING 단계 (최적화 - Stream API 활용)
 ```java
@@ -859,3 +859,45 @@ class DynamicTestExample {
 ❌ **단점**
 - ❌ 프로덕션 코드에 침투적 🏗️
 - ❌ 테스트와 무관하여 신뢰도 낮을 수 있음 🤔  
+
+---
+### 🏗️ 아키텍트 목표
+
+* **💡 인적 자원 절감**
+* **📑 정책을 만들고 세부사항을 미루는 시스템 개발**
+
+**개발 초기 단계에서 선택을 미루기:**
+
+* 초기에는 **Oracle**인지 **MySQL**인지 선택할 필요 없음 🛑
+* 초기에는 **Nginx**인지 **Apache**인지 선택할 필요 없음 🛑
+* 초기에는 **REST**인지 **GraphQL**인지 선택할 필요 없음 🛑
+* 초기에는 **Spring**을 적용할 필요 없음 🛑
+
+**📍 도메인 우선 개발:**
+
+* **💡 도메인**이 먼저 개발되어야 함
+
+---
+
+###  🔄헥사고날 아키텍처 [Spring Hexagonal Architecture](https://reflectoring.io/spring-hexagonal/)
+
+* **🔄 의존성 역전 (Port-Adapter Pattern)**
+
+  * **⚙️ 관심사의 분리**: 시스템의 각 부분을 독립적으로 관리할 수 있도록 분리
+  * **🔒 고립화**: 서로의 영향을 받지 않도록 각 모듈을 독립적으로 만듦
+  * **🔄 의존성 역전**: 외부 시스템의 변화가 내부 시스템에 미치는 영향을 최소화
+
+* **🌱 진화하는 아키텍처**
+  * 더 이상 필요하지 않은 **⛔ 계층**은 제거하고, 시스템의 구조를 유연하게 유지
+---
+
+### 📊 변화 예시
+
+<p align="center">
+  <img src="img/img_3.png" width="30%" />
+  <img src="img/img_4.png" width="30%" />
+  <img src="img/img_5.png" width="30%" />
+  <img src="img/img_6.png" width="30%" />
+</p>
+
+
